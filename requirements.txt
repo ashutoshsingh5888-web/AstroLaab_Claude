@@ -1,0 +1,17 @@
+# Core
+fastapi==0.115.5
+uvicorn[standard]==0.32.1
+pydantic==2.10.3
+pydantic-settings==2.6.1
+
+# Swiss Ephemeris
+pyswisseph==2.10.3.2
+
+# PDF generation
+reportlab==4.2.5
+
+# Timezone
+pytz==2024.2
+
+# Production server
+gunicorn==23.0.0

@@ -1,0 +1,50 @@
+services:
+  - type: web
+    name: vedic-astrology-api
+    runtime: python
+    region: singapore  # Closest to India
+    plan: free         # Change to 'starter' or higher for production
+
+    buildCommand: |
+      pip install -r requirements.txt
+
+    startCommand: |
+      gunicorn app.main:app \
+        --workers 2 \
+        --worker-class uvicorn.workers.UvicornWorker \
+        --bind 0.0.0.0:$PORT \
+        --timeout 120 \
+        --access-logfile - \
+        --error-logfile -
+
+    healthCheckPath: /health
+
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+
+      - key: LOG_LEVEL
+        value: INFO
+
+      - key: LOG_FORMAT
+        value: json
+
+      - key: EPHE_PATH
+        value: ./ephe
+
+      - key: DEBUG
+        value: "false"
+
+      # ⚠️ REQUIRED: Set your API key(s) in Render dashboard
+      # Go to: Dashboard → Your Service → Environment → Add Variable
+      # Key: API_KEYS
+      # Value: your-secret-key-here (comma-separated for multiple keys)
+      # Example: astro-abc123,astro-def456
+      - key: API_KEYS
+        sync: false  # Must be set manually in Render dashboard (secret)
+
+      - key: RATE_LIMIT_PER_MINUTE
+        value: "60"
+
+      - key: PYTHONUNBUFFERED
+        value: "1"
